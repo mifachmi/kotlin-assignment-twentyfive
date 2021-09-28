@@ -7,8 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class NetworkConfig {
-    // set interceptor
-    fun getInterceptor() : OkHttpClient {
+    private fun getInterceptor() : OkHttpClient {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
         val okHttpClient = OkHttpClient.Builder()
@@ -17,7 +16,7 @@ class NetworkConfig {
         return  okHttpClient
     }
 
-    fun getRetrofit() : Retrofit {
+    private fun getRetrofit() : Retrofit {
         return Retrofit.Builder()
             .baseUrl("http://192.168.1.6/kotlin-assignment-seventeen/php_rest_api.php/")
             .client(getInterceptor())

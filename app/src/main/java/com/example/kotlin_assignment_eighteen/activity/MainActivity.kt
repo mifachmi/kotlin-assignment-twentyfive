@@ -55,7 +55,8 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
             .getAllTasks()
             .enqueue(object : Callback<GetAllTaskResponse> {
                 override fun onFailure(call: Call<GetAllTaskResponse>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity,
+                        t.localizedMessage, Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onResponse(
@@ -69,7 +70,8 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
 
                     btnEdit.setOnItemClickCallback(object : TaskAdapter.OnItemClickCallback{
                         override fun onItemClicked(data: DataItem) {
-                            Toast.makeText(this@MainActivity, "Edit task id ${data.id}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@MainActivity,
+                                "Edit task id ${data.id}", Toast.LENGTH_SHORT).show()
                             binding.tvIdTaskMain.text = data.id
                             binding.etTaskName.setText(data.taskName)
                             binding.etDueDate.setText(data.taskDate)
@@ -77,7 +79,6 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
                                 updateTask(context = applicationContext, data.id.toString())
                                 binding.etTaskName.text = null
                                 binding.etDueDate.text = null
-//                                clickBtnSave(data)
                             }
                         }
                     })
@@ -142,7 +143,8 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
                     call: Call<UpdateTaskResponse>,
                     response: Response<UpdateTaskResponse>
                 ) {
-                    Toast.makeText(context.applicationContext, "Berhasil Mengedit Task $id", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context.applicationContext,
+                        "Berhasil Mengedit Task $id", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onFailure(call: Call<UpdateTaskResponse>, t: Throwable) {
@@ -160,7 +162,8 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
                     call: Call<DeleteDataResponse>,
                     response: Response<DeleteDataResponse>
                 ) {
-                    Toast.makeText(context.applicationContext, "Berhasil Menghapus Task $id", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context.applicationContext,
+                        "Berhasil Menghapus Task $id", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onFailure(call: Call<DeleteDataResponse>, t: Throwable) {

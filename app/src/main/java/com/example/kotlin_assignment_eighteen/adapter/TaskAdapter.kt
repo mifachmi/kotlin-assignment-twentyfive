@@ -29,14 +29,9 @@ class TaskAdapter(private val dataAllTask: List<DataItem>) : RecyclerView.Adapte
                 btnEdit.setOnClickListener {
                     onItemClickCallback.onItemClicked(tasks)
                 }
-
                 btnDelete.setOnClickListener {
                     MainActivity().deleteTask(itemView.context, tvIdTask.text.toString())
                 }
-
-//                itemView.setOnClickListener {
-//                    onItemClickCallback.onItemClicked()
-//                }
             }
         }
     }
