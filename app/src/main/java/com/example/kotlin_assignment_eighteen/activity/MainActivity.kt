@@ -1,7 +1,10 @@
 package com.example.kotlin_assignment_eighteen.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -86,6 +89,23 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
                 }
             })
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.option_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.itemAddAccount -> {
+                val intentToAddAccount = Intent(this, UsersActivity::class.java)
+                startActivity(intentToAddAccount)
+                true
+            }
+            else -> true
+        }
     }
 
     override fun onDialogDateSet(tag: String?, year: Int, month: Int, dayOfMonth: Int) {
