@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
 
     private fun clearSharedPref() {
         val editor = sharedPref.edit()
+        editor.putBoolean("IS_LOGIN", false)
         editor.putString("NAME", "")
         editor.putString("EMAIL", "")
         editor.putString("PASSWORD", "password")

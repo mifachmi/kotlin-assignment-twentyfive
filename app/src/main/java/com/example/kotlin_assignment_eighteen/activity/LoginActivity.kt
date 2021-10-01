@@ -16,16 +16,27 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    lateinit var sharedPref: SharedPreferences
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         sharedPref = getSharedPreferences("GENERAL_KEY", Context.MODE_PRIVATE)
+        checkLogin()
 
         binding.btnJoinGuest.setOnClickListener { onClickButtonJoinAsGuest() }
         binding.btnLogin.setOnClickListener { onClickButtonLogin() }
+    }
+
+    private fun checkLogin() {
+        if (this.isLoggedIn()) {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+    }
+
+    private fun isLoggedIn(): Boolean {
+        return this.sharedPref.getBoolean("IS_LOGIN", false)
     }
 
     private fun onClickButtonLogin() {
@@ -64,11 +75,9 @@ class LoginActivity : AppCompatActivity() {
                         val name = response.body()?.data?.get(0)?.nameUser.toString()
                         val email = response.body()?.data?.get(0)?.emailUser.toString()
                         val password = response.body()?.data?.get(0)?.password.toString()
-                        val editor = sharedPref.edit()
-                        editor.putString("NAME", name)
-                        editor.putString("EMAIL", email)
-                        editor.putString("PASSWORD", password)
-                        editor.apply()
+
+                        saveLoginSession(name, email, password)
+
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
                     }
@@ -83,6 +92,15 @@ class LoginActivity : AppCompatActivity() {
                 }
 
             })
+    }
+
+    private fun saveLoginSession(name: String, email: String, password: String) {
+        val editor = sharedPref.edit()
+        editor.putBoolean("IS_LOGIN", true)
+        editor.putString("NAME", name)
+        editor.putString("EMAIL", email)
+        editor.putString("PASSWORD", password)
+        editor.apply()
     }
 
     private fun onClickButtonJoinAsGuest() {
