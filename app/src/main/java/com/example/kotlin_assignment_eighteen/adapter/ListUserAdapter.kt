@@ -4,10 +4,21 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.kotlin_assignment_eighteen.activity.UsersActivity
 import com.example.kotlin_assignment_eighteen.databinding.UserRowListBinding
 import com.example.kotlin_assignment_eighteen.model.DataItemUser
 
 class ListUserAdapter(private val listUser: List<DataItemUser>) : RecyclerView.Adapter<ListUserAdapter.ListUserHolder>() {
+
+    interface OnItemClickCallback {
+        fun onItemClicked(data: DataItemUser)
+    }
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     inner class ListUserHolder(private val binding: UserRowListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(users: DataItemUser) {
@@ -18,15 +29,15 @@ class ListUserAdapter(private val listUser: List<DataItemUser>) : RecyclerView.A
                 tvPasswordHistory.text = users.password
 
                 Glide.with(itemView.context)
-                    .load("http://192.168.1.6/kotlin-assignment-nineteen/uploaded_image/${users.photoUser}")
+                    .load(FILE_PATH + users.photoUser)
                     .into(civImageHistory)
 
-//                btnEdit.setOnClickListener {
-//                    onItemClickCallback.onItemClicked(tasks)
-//                }
-//                btnDelete.setOnClickListener {
-//                    MainActivity().deleteTask(itemView.context, tvIdTask.text.toString())
-//                }
+                btnEditUser.setOnClickListener {
+                    onItemClickCallback.onItemClicked(users)
+                }
+                btnDeleteUser.setOnClickListener {
+                    UsersActivity().deleteUser(itemView.context, tvIdUser.text.toString())
+                }
             }
         }
     }
@@ -41,4 +52,8 @@ class ListUserAdapter(private val listUser: List<DataItemUser>) : RecyclerView.A
     }
 
     override fun getItemCount() = listUser.size
+
+    companion object {
+        const val FILE_PATH = "http://192.168.1.6/kotlin-assignment-nineteen/uploaded_image/"
+    }
 }

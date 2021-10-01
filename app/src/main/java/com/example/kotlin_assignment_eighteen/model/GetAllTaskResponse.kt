@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class GetAllTaskResponse(
 
 	@field:SerializedName("data")
-	val data: List<DataItem?>? = null,
+	val data: List<DataItem>? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null,

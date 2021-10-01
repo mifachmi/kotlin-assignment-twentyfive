@@ -1,9 +1,6 @@
 package com.example.kotlin_assignment_eighteen.api
 
-import com.example.kotlin_assignment_eighteen.model.CreateDataResponse
-import com.example.kotlin_assignment_eighteen.model.DeleteDataResponse
-import com.example.kotlin_assignment_eighteen.model.GetAllTaskResponse
-import com.example.kotlin_assignment_eighteen.model.UpdateTaskResponse
+import com.example.kotlin_assignment_eighteen.model.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -18,7 +15,7 @@ interface Tasks {
         @Field("task_date") task_date: String,
         @Field("is_done") is_done: String,
         @Query("id") id: String
-    ): Call<UpdateTaskResponse>
+    ): Call<UpdateDataResponse>
 
     @DELETE("?function=delete_task")
     fun deleteTask(

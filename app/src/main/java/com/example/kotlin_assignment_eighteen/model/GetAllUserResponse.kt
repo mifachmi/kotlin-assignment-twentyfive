@@ -2,13 +2,13 @@ package com.example.kotlin_assignment_eighteen.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class GetAllUserResponse(
 
 	@field:SerializedName("data")
-	val data: List<DataItemUser?>? = null,
+	val data: List<DataItemUser>? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null,
@@ -21,13 +21,13 @@ data class GetAllUserResponse(
 data class DataItemUser(
 
 	@field:SerializedName("password")
-	val password: String? = null,
+	var password: String? = null,
 
 	@field:SerializedName("name_user")
-	val nameUser: String? = null,
+	var nameUser: String? = null,
 
 	@field:SerializedName("email_user")
-	val emailUser: String? = null,
+	var emailUser: String? = null,
 
 	@field:SerializedName("photo_user")
 	val photoUser: String? = null,

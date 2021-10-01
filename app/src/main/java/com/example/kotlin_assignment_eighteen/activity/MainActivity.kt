@@ -1,7 +1,9 @@
 package com.example.kotlin_assignment_eighteen.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -26,40 +28,90 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
     View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        sharedPref = getSharedPreferences("GENERAL_KEY", Context.MODE_PRIVATE)
+        val name = sharedPref.getString("NAME", "")
+        val email = sharedPref.getString("EMAIL", "")
+        val password = sharedPref.getString("PASSWORD", "")
+
+        showExistingPreference(name.toString())
+
         binding.ibCalender.setOnClickListener(this)
         binding.btnSave.setOnClickListener(this)
-        binding.pbMain.visibility = View.VISIBLE
 
-        binding.btnSave.setOnClickListener {
-            if(binding.etTaskName.text.isNullOrEmpty() || binding.etDueDate.text.isNullOrEmpty()) {
-                Toast.makeText(this@MainActivity, "isi data dulu", Toast.LENGTH_SHORT).show()
-            } else {
-                addNewTask()
-                binding.etTaskName.text = null
-                binding.etDueDate.text = null
-            }
+        with(binding) {
+            pbMain.visibility = View.VISIBLE
+            btnSave.setOnClickListener { onClickBtnSave() }
+            constraintLayout.setOnClickListener { onClickLayout() }
+            btnLogout.setOnClickListener { onClickBtnLogout() }
         }
 
-        binding.constraintLayout.setOnClickListener {
-            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).apply {
-                hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-            }
-            binding.etTaskName.clearFocus()
-            binding.etDueDate.clearFocus()
-        }
+        getAllTask()
 
+    }
+
+    private fun onClickBtnLogout() {
+        clearSharedPref()
+        binding.llLogin.visibility = View.GONE
+        finishAndRemoveTask()
+    }
+
+    private fun clearSharedPref() {
+        val editor = sharedPref.edit()
+        editor.putString("NAME", "")
+        editor.putString("EMAIL", "")
+        editor.putString("PASSWORD", "password")
+        editor.apply()
+    }
+
+    private fun showExistingPreference(name: String) {
+        if (name != "") {
+            showLinearLayout(name)
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun showLinearLayout(name: String) {
+        Toast.makeText(this, name, Toast.LENGTH_SHORT).show()
+        with(binding) {
+            llLogin.visibility = View.VISIBLE
+            tvWelcome.text = "Welcome, $name"
+        }
+    }
+
+    private fun onClickBtnSave() {
+        if (binding.etTaskName.text.isNullOrEmpty() || binding.etDueDate.text.isNullOrEmpty()) {
+            Toast.makeText(this@MainActivity, "isi data dulu", Toast.LENGTH_SHORT).show()
+        } else {
+            addNewTask()
+            binding.etTaskName.text = null
+            binding.etDueDate.text = null
+        }
+    }
+
+    private fun onClickLayout() {
+        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).apply {
+            hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        }
+        binding.etTaskName.clearFocus()
+        binding.etDueDate.clearFocus()
+    }
+
+    private fun getAllTask() {
         NetworkConfig().getService()
             .getAllTasks()
             .enqueue(object : Callback<GetAllTaskResponse> {
                 override fun onFailure(call: Call<GetAllTaskResponse>, t: Throwable) {
-                    Toast.makeText(this@MainActivity,
-                        t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@MainActivity,
+                        t.localizedMessage, Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 override fun onResponse(
@@ -71,10 +123,12 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
                     binding.rvTasks.adapter = btnEdit
                     binding.pbMain.visibility = View.GONE
 
-                    btnEdit.setOnItemClickCallback(object : TaskAdapter.OnItemClickCallback{
+                    btnEdit.setOnItemClickCallback(object : TaskAdapter.OnItemClickCallback {
                         override fun onItemClicked(data: DataItem) {
-                            Toast.makeText(this@MainActivity,
-                                "Edit task id ${data.id}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Edit task id ${data.id}", Toast.LENGTH_SHORT
+                            ).show()
                             binding.tvIdTaskMain.text = data.id
                             binding.etTaskName.setText(data.taskName)
                             binding.etDueDate.setText(data.taskDate)
@@ -88,7 +142,6 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
 
                 }
             })
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -119,7 +172,7 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
     }
 
     override fun onClick(v: View?) {
-        when(v?.id) {
+        when (v?.id) {
             R.id.ibCalender -> {
                 val datePickerFragment = DatePickerFragment()
                 datePickerFragment.show(supportFragmentManager, "DATE_PICKER_TAG")
@@ -135,12 +188,16 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
                 binding.etDueDate.text.toString(),
                 is_done = "0"
             )
-            .enqueue(object : Callback<CreateDataResponse>{
+            .enqueue(object : Callback<CreateDataResponse> {
                 override fun onResponse(
                     call: Call<CreateDataResponse>,
                     response: Response<CreateDataResponse>
                 ) {
-                    Toast.makeText(this@MainActivity, "Berhasil Menambahkan Task Baru", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Berhasil Menambahkan Task Baru",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 override fun onFailure(call: Call<CreateDataResponse>, t: Throwable) {
@@ -158,16 +215,18 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
                 is_done = "0",
                 id
             )
-            .enqueue(object : Callback<UpdateTaskResponse>{
+            .enqueue(object : Callback<UpdateDataResponse> {
                 override fun onResponse(
-                    call: Call<UpdateTaskResponse>,
-                    response: Response<UpdateTaskResponse>
+                    call: Call<UpdateDataResponse>,
+                    response: Response<UpdateDataResponse>
                 ) {
-                    Toast.makeText(context.applicationContext,
-                        "Berhasil Mengedit Task $id", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context.applicationContext,
+                        "Berhasil Mengedit Task $id", Toast.LENGTH_SHORT
+                    ).show()
                 }
 
-                override fun onFailure(call: Call<UpdateTaskResponse>, t: Throwable) {
+                override fun onFailure(call: Call<UpdateDataResponse>, t: Throwable) {
                     Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_SHORT).show()
                 }
 
@@ -177,13 +236,15 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
     fun deleteTask(context: Context, id: String) {
         NetworkConfig().getService()
             .deleteTask(id)
-            .enqueue(object : Callback<DeleteDataResponse>{
+            .enqueue(object : Callback<DeleteDataResponse> {
                 override fun onResponse(
                     call: Call<DeleteDataResponse>,
                     response: Response<DeleteDataResponse>
                 ) {
-                    Toast.makeText(context.applicationContext,
-                        "Berhasil Menghapus Task $id", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context.applicationContext,
+                        "Berhasil Menghapus Task $id", Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 override fun onFailure(call: Call<DeleteDataResponse>, t: Throwable) {

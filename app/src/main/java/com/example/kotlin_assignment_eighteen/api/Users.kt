@@ -1,16 +1,19 @@
 package com.example.kotlin_assignment_eighteen.api
 
-import com.example.kotlin_assignment_eighteen.model.CreateDataResponse
-import com.example.kotlin_assignment_eighteen.model.GetAllUserResponse
-import com.example.kotlin_assignment_eighteen.model.UploadImageResponse
+import com.example.kotlin_assignment_eighteen.model.*
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
-
 interface Users {
     @GET("?function=get_all_users")
     fun getAllUsers(): Call<GetAllUserResponse>
+
+    @GET("?function=login_user")
+    fun checkLogin(
+        @Query("email_user") email_user: String,
+        @Query("password") password: String
+    ): Call<GetAllUserResponse>
 
     @Multipart
     @POST("?function=upload_image")
@@ -25,4 +28,19 @@ interface Users {
         @Field("password") password: String,
         @Field("photo_user") photo_user: String
     ): Call<CreateDataResponse>
+
+    @FormUrlEncoded
+    @POST("?function=update_user")
+    fun updateUser(
+        @Field("name_user") name_user: String,
+        @Field("email_user") email_user: String,
+        @Field("password") password: String,
+        @Field("photo_user") photo_user: String,
+        @Query("id") id: String
+    ): Call<UpdateDataResponse>
+
+    @DELETE("?function=delete_user")
+    fun deleteUser(
+        @Query("id") id: String
+    ): Call<DeleteDataResponse>
 }
