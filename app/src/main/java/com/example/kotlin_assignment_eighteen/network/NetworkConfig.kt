@@ -1,11 +1,14 @@
 package com.example.kotlin_assignment_eighteen.network
 
+import com.example.kotlin_assignment_eighteen.api.Notification
 import com.example.kotlin_assignment_eighteen.api.Tasks
 import com.example.kotlin_assignment_eighteen.api.Users
+import com.example.kotlin_assignment_eighteen.const.Constants.Companion.BASE_FCM_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 class NetworkConfig {
     private fun getInterceptor(): OkHttpClient {
@@ -32,7 +35,17 @@ class NetworkConfig {
             .build()
     }
 
+    private fun getRetrofitNotification() : Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BASE_FCM_URL)
+            .client(getInterceptor())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
     fun getService() = getRetrofit().create(Tasks::class.java)
 
     fun getServiceUser() = getRetrofitUser().create(Users::class.java)
+
+    fun getServiceNotification() = getRetrofitNotification().create(Notification::class.java)
 }

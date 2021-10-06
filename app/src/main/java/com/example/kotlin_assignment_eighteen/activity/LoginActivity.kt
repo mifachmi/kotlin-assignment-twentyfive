@@ -4,11 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kotlin_assignment_eighteen.R
 import com.example.kotlin_assignment_eighteen.databinding.ActivityLoginBinding
 import com.example.kotlin_assignment_eighteen.model.GetAllUserResponse
 import com.example.kotlin_assignment_eighteen.network.NetworkConfig
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,10 +27,24 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         sharedPref = getSharedPreferences("GENERAL_KEY", Context.MODE_PRIVATE)
+        tokenFirebase()
         checkLogin()
 
         binding.btnJoinGuest.setOnClickListener { onClickButtonJoinAsGuest() }
         binding.btnLogin.setOnClickListener { onClickButtonLogin() }
+    }
+
+    private fun tokenFirebase() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("TAG", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+            // Get new FCM registration token
+            val token = task.result
+            // Log and toast
+            Log.d("TAG", token.toString())
+        })
     }
 
     private fun checkLogin() {

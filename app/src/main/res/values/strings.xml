@@ -16,4 +16,5 @@
     <string name="join_as_a_guest">Join as a guest</string>
     <string name="upload_image">Upload Image</string>
     <string name="logout">logout</string>
+    <string name="default_notification_channel_id">tes</string>
 </resources>

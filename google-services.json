@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "391464023767",
+    "project_id": "tugas-21-firebase-kotlin",
+    "storage_bucket": "tugas-21-firebase-kotlin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391464023767:android:da7af3f9ba53aa5ceda292",
+        "android_client_info": {
+          "package_name": "com.example.kotlin_assignment_eighteen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "391464023767-58hk3t5epas7enoc5s4sosavn8kalkll.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMBa8MauWb3bicjTZpQjjiALsbNa-VzjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "391464023767-58hk3t5epas7enoc5s4sosavn8kalkll.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
