@@ -1,8 +1,52 @@
 <?php
 require_once "connection.php";
+require_once "config.php";
+require_once "data.php";
+require_once "firebase.php";
 
 if (function_exists($_GET['function'])) {
     $_GET['function']();
+}
+
+function sendNotification() {
+    $tableAtribute = array(
+        'title' => '',
+        'message' => ''
+    );
+    $dataFromUserCheck = count(array_intersect_key($_POST, $tableAtribute));
+
+    if ($dataFromUserCheck == count($tableAtribute)) {
+        
+        $title = $_POST['title'];
+        $message = $_POST['message'];
+
+        $data = new Data();
+        $firebase = new Firebase();
+
+        $data -> setTitle($title);
+        $data -> setMessage($message);
+
+        $result = $firebase->send(FCM_TOKEN, $data->getPush());
+
+        if ($result) {
+            $response = array(
+                'status' => 1,
+                'message' => 'push notif succeed'
+            );
+        } else {
+            $response = array(
+                'status' => 0,
+                'message' => 'push notif failed'
+            );
+        }
+    } else {
+        $response = array(
+            'status' => 0,
+            'message' => 'wrong parameter'
+        );
+    }
+
+    echo json_encode($response);
 }
 
 function get_all_users()
