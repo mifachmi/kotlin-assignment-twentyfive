@@ -1,19 +1,17 @@
 package com.example.kotlin_assignment_eighteen.api
 
-import com.example.kotlin_assignment_eighteen.const.Constants.Companion.CONTENT_TYPE
-import com.example.kotlin_assignment_eighteen.const.Constants.Companion.SERVER_KEY
-import com.example.kotlin_assignment_eighteen.model.DataNotification
 import com.example.kotlin_assignment_eighteen.model.NotificationResponse
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.Headers
+import retrofit2.Call
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface Notification {
 
-    @Headers("Authorization: key = $SERVER_KEY", "Content-Type: $CONTENT_TYPE")
-    @POST("fcm/send")
+    @FormUrlEncoded
+    @POST("?function=sendNotification")
     fun pushNotification(
-        @Body notification: DataNotification
-    ): Response<NotificationResponse>
+        @Field("title") title: String,
+        @Field("message") message: String
+    ): Call<NotificationResponse>
 }

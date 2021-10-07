@@ -8,33 +8,48 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.kotlin_assignment_eighteen.R
 import com.example.kotlin_assignment_eighteen.activity.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import org.json.JSONObject
 
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    override fun onMessageReceived(p0: RemoteMessage) {
-        super.onMessageReceived(p0)
-        sendNotification(p0)
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        super.onMessageReceived(remoteMessage)
+        sendNotification(remoteMessage)
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
-    private fun sendNotification(p0: RemoteMessage) {
+    private fun sendNotification(remoteMessage: RemoteMessage) {
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
         val channelId = getString(R.string.default_notification_channel_id)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        Log.d("TAG", remoteMessage.data.toString())
+        val notificationBuilder: NotificationCompat.Builder
 
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setContentTitle(p0.notification?.title)
-            .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-            .setContentText(p0.notification?.body)
-            .setSound(defaultSoundUri)
-            .setContentIntent(pendingIntent)
+        // handle notif from console firebase
+        if (remoteMessage.data.isNullOrEmpty()) {
+            notificationBuilder = NotificationCompat.Builder(this, channelId)
+                .setContentTitle(remoteMessage.notification?.title)
+                .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+                .setContentText(remoteMessage.notification?.body)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent)
+        } else { //handle notif from user input
+            val dataNotif = JSONObject(remoteMessage.data.toString()).getJSONObject("data")
+            notificationBuilder = NotificationCompat.Builder(this, channelId)
+                .setContentTitle(dataNotif.getString("title"))
+                .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+                .setContentText(dataNotif.getString("message"))
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent)
+        }
 
         val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

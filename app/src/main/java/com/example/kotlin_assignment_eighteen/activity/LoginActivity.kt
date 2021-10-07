@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.kotlin_assignment_eighteen.R
+import com.example.kotlin_assignment_eighteen.const.Constants.Companion.FCM_TOKEN
 import com.example.kotlin_assignment_eighteen.databinding.ActivityLoginBinding
 import com.example.kotlin_assignment_eighteen.model.GetAllUserResponse
 import com.example.kotlin_assignment_eighteen.network.NetworkConfig
@@ -41,9 +41,9 @@ class LoginActivity : AppCompatActivity() {
                 return@OnCompleteListener
             }
             // Get new FCM registration token
-            val token = task.result
+            FCM_TOKEN = task.result.toString()
             // Log and toast
-            Log.d("TAG", token.toString())
+            Log.d("TAG", FCM_TOKEN)
         })
     }
 

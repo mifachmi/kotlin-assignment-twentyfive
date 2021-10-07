@@ -21,7 +21,7 @@ class NetworkConfig {
 
     private fun getRetrofit() : Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.6/kotlin-assignment-nineteen/todolist_rest_api.php/")
+            .baseUrl("http://192.168.1.5/kotlin-assignment-nineteen/todolist_rest_api.php/")
             .client(getInterceptor())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -29,7 +29,7 @@ class NetworkConfig {
 
     private fun getRetrofitUser() : Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.6/kotlin-assignment-nineteen/users_rest_api.php/")
+            .baseUrl("http://192.168.1.5/kotlin-assignment-nineteen/users_rest_api.php/")
             .client(getInterceptor())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -37,7 +37,7 @@ class NetworkConfig {
 
     private fun getRetrofitNotification() : Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_FCM_URL)
+            .baseUrl("http://192.168.1.5/kotlin-assignment-twenty-backend/users_rest_api.php/")
             .client(getInterceptor())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

@@ -17,4 +17,8 @@
     <string name="upload_image">Upload Image</string>
     <string name="logout">logout</string>
     <string name="default_notification_channel_id">tes</string>
+    <string name="title">Title</string>
+    <string name="coba_push_notification_fcm">Coba Push Notification - FCM</string>
+    <string name="short_message">Short Message</string>
+    <string name="send_notification">Send Notification</string>
 </resources>
