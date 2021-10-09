@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.kotlin_assignment_eighteen.R
 import com.example.kotlin_assignment_eighteen.activity.MainActivity
+import com.example.kotlin_assignment_eighteen.const.Constants.Companion.FCM_TOKEN
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.json.JSONObject
@@ -21,16 +22,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        sendNotification(remoteMessage)
+        receiveNotification(remoteMessage)
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
-    private fun sendNotification(remoteMessage: RemoteMessage) {
+    private fun receiveNotification(remoteMessage: RemoteMessage) {
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
         val channelId = getString(R.string.default_notification_channel_id)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        Log.d("TAG", remoteMessage.data.toString())
         val notificationBuilder: NotificationCompat.Builder
 
         // handle notif from console firebase
@@ -41,8 +41,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 .setContentText(remoteMessage.notification?.body)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent)
+            Log.d("TAG_MFMS", remoteMessage.notification?.title.toString())
+            Log.d("TAG_MFMS", remoteMessage.notification?.body.toString())
         } else { //handle notif from user input
             val dataNotif = JSONObject(remoteMessage.data.toString()).getJSONObject("data")
+            Log.d("TAG_MFMS", remoteMessage.data.toString())
+            Log.d("TAG_MFMS", FCM_TOKEN)
             notificationBuilder = NotificationCompat.Builder(this, channelId)
                 .setContentTitle(dataNotif.getString("title"))
                 .setSmallIcon(R.drawable.ic_baseline_notifications_24)

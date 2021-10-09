@@ -16,7 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.kotlin_assignment_eighteen.R
-import com.example.kotlin_assignment_eighteen.adapter.ListUserAdapter
+import com.example.kotlin_assignment_eighteen.const.Constants.Companion.FILE_PATH
 import com.example.kotlin_assignment_eighteen.databinding.ActivityUsersBinding
 import com.example.kotlin_assignment_eighteen.model.*
 import com.example.kotlin_assignment_eighteen.network.NetworkConfig
@@ -130,7 +130,7 @@ class UsersActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 etEmail.setText(dataParcelable?.emailUser)
                 etPassword.setText(dataParcelable?.password)
                 Glide.with(applicationContext)
-                    .load(ListUserAdapter.FILE_PATH + dataParcelable?.photoUser)
+                    .load(FILE_PATH + dataParcelable?.photoUser)
                     .into(civProfilePhoto)
             }
         }
@@ -148,6 +148,7 @@ class UsersActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                         context.applicationContext,
                         "Berhasil Menghapus User $id", Toast.LENGTH_SHORT
                     ).show()
+                    finish()
                 }
 
                 override fun onFailure(call: Call<DeleteDataResponse>, t: Throwable) {
@@ -225,7 +226,7 @@ class UsersActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                             Toast.LENGTH_SHORT
                         ).show()
                         Glide.with(applicationContext)
-                            .load("http://192.168.1.6/kotlin-assignment-nineteen/uploaded_image/$imageName")
+                            .load(FILE_PATH + imageName)
                             .into(binding.civProfilePhoto)
                     }
                 }

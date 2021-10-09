@@ -36,26 +36,33 @@ class FormCloudMessagingActivity : AppCompatActivity() {
             // Get new FCM registration token
             FCM_TOKEN = task.result.toString()
             // Log and toast
-            Log.d("TAG", FCM_TOKEN.toString())
+            Log.d("TAG", FCM_TOKEN)
         })
     }
 
     private fun onClickBtnSendNotif() {
         val fcmToken = FCM_TOKEN
-        val titleNotif = binding.etTitleNotification.text
-        val bodyNotif = binding.etMessageNotification.text
+        val titleNotif = binding.etTitleNotification.text.toString()
+        val bodyNotif = binding.etMessageNotification.text.toString()
+
+        Log.d("TAG", fcmToken)
 
         if (fcmToken.isEmpty() || titleNotif.isEmpty() || bodyNotif.isEmpty()) {
             Toast.makeText(this, "invalid fcm token or empty title/message", Toast.LENGTH_SHORT).show()
         } else {
             NetworkConfig().getServiceNotification().pushNotification(
-                titleNotif.toString(), bodyNotif.toString()
+                titleNotif, bodyNotif
             ).enqueue(object: Callback<NotificationResponse> {
                 override fun onResponse(
                     call: Call<NotificationResponse>,
                     response: Response<NotificationResponse>
                 ) {
-                    Toast.makeText(this@FormCloudMessagingActivity, "sukses push notifikasi", Toast.LENGTH_SHORT).show()
+                    if (response.body()?.status == "1") {
+                        Log.d("TAG", response.body().toString())
+                        Toast.makeText(this@FormCloudMessagingActivity, "sukses push notifikasi", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@FormCloudMessagingActivity, "gagal push notifikasi ke fcm", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {

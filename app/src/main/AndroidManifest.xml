@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+<!--    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />-->
 
     <application
         android:allowBackup="true"
@@ -15,9 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kotlinassignmenteighteen"
         android:usesCleartextTraffic="true">
-<!--        <activity-->
-<!--            android:name=".activity.FormCloudMessagingActivity"-->
-<!--            android:exported="true" />-->
+        <activity
+            android:name=".activity.LoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.DashboardActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.FormCloudMessagingActivity"
+            android:exported="true" />
 
         <service
             android:name=".firebase.MyFirebaseMessagingService"
@@ -37,7 +43,8 @@
             android:name=".activity.UsersActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.FormCloudMessagingActivity"
+            android:name=".activity.SplashScreenActivity"
+            android:theme="@style/splashTheme"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
-    android:padding="16dp"
+    android:padding="48dp"
     android:orientation="vertical"
     tools:context=".activity.LoginActivity">
 
@@ -59,6 +59,7 @@
         android:text="@string/login"/>
 
     <com.google.android.material.button.MaterialButton
+        android:visibility="gone"
         android:layout_marginTop="8dp"
         android:id="@+id/btnJoinGuest"
         android:layout_gravity="center_horizontal"
