@@ -15,6 +15,21 @@ interface Users {
         @Query("password") password: String
     ): Call<GetAllUserResponse>
 
+    @GET("?function=get_user_by_device_id")
+    fun checkLoginBiometric(
+        @Query("device_id") device_id: String
+    ): Call<GetAllUserResponse>
+
+    @GET("?function=check_device_id")
+    fun checkDeviceId(
+        @Query("device_id") device_id: String
+    ): Call<GetAllUserResponse>
+
+    @GET("?function=check_device_id_by_user_id")
+    fun checkDeviceIdByUserId(
+        @Query("id") id: String
+    ): Call<GetAllUserResponse>
+
     @Multipart
     @POST("?function=upload_image")
     fun uploadImage(@Part body: MultipartBody.Part): Call<UploadImageResponse>
@@ -26,7 +41,8 @@ interface Users {
         @Field("name_user") name_user: String,
         @Field("email_user") email_user: String,
         @Field("password") password: String,
-        @Field("photo_user") photo_user: String
+        @Field("photo_user") photo_user: String,
+        @Field("device_id") device_id: String
     ): Call<CreateDataResponse>
 
     @FormUrlEncoded
@@ -36,6 +52,7 @@ interface Users {
         @Field("email_user") email_user: String,
         @Field("password") password: String,
         @Field("photo_user") photo_user: String,
+        @Field("device_id") device_id: String,
         @Query("id") id: String
     ): Call<UpdateDataResponse>
 

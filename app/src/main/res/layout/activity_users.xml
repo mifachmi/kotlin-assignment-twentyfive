@@ -9,6 +9,13 @@
     android:gravity="center_vertical"
     tools:context=".activity.UsersActivity">
 
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tvDeviceID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"/>
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_gravity="center_horizontal"
         android:id="@+id/civProfilePhoto"
@@ -88,6 +95,30 @@
             android:layout_height="wrap_content"
             android:hint="@string/password"
             android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/boxDeviceId"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxCornerRadiusBottomEnd="24dp"
+        app:boxCornerRadiusBottomStart="24dp"
+        app:boxCornerRadiusTopEnd="24dp"
+        app:boxCornerRadiusTopStart="24dp"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        android:layout_marginTop="8dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etDeviceID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:clickable="false"
+            android:focusable="false"
+            android:hint="@string/device_id" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

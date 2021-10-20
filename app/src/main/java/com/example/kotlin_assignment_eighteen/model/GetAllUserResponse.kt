@@ -33,5 +33,8 @@ data class DataItemUser(
 	val photoUser: String? = null,
 
 	@field:SerializedName("id")
-	val id: String? = null
+	val id: String? = null,
+
+	@field:SerializedName("device_id")
+	val device_id: String? = null
 ) : Parcelable

@@ -8,9 +8,11 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -35,14 +37,48 @@ class UsersActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private lateinit var binding: ActivityUsersBinding
     private var imageName = ""
+    private var tvIdDevice = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUsersBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setDefaultImage()
+        getDeviceIdManual()
         binding.btnUploadImage.setOnClickListener { onClickUploadImage() }
         binding.btnCreateUser.setOnClickListener { onClickCreateUser() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setLayoutDeviceId()
+    }
+
+    private fun setLayoutDeviceId() {
+        if (!binding.tvIdUserActivity.text.equals("")) {
+            NetworkConfig().getServiceUser().checkDeviceIdByUserId(binding.tvIdUserActivity.text.toString())
+                .enqueue(object : Callback<GetAllUserResponse> {
+                    override fun onResponse(
+                        call: Call<GetAllUserResponse>,
+                        response: Response<GetAllUserResponse>
+                    ) {
+                        tvIdDevice = response.body()?.data?.get(0)?.device_id.toString()
+                        Log.d("CDI res", tvIdDevice)
+                        binding.boxDeviceId.visibility = View.VISIBLE
+                        binding.etDeviceID.setText(tvIdDevice)
+                    }
+
+                    override fun onFailure(call: Call<GetAllUserResponse>, t: Throwable) {
+                        Log.e("CDI", t.message.toString())
+                    }
+                })
+        }
+    }
+
+    @SuppressLint("HardwareIds")
+    private fun getDeviceIdManual() {
+        val idDevice = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        binding.tvDeviceID.text = idDevice.toString()
     }
 
     private fun onClickCreateUser() {
@@ -52,15 +88,69 @@ class UsersActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             ) {
                 Toast.makeText(this@UsersActivity, "Form must be filled", Toast.LENGTH_SHORT).show()
             } else {
+
+                val tvDeviceId = binding.etDeviceID.text.toString()
+                val getDeviceId = checkDeviceId(tvDeviceId)
+
+                Log.d("TAG 1", tvDeviceId)
+                Log.d("TAG 1", getDeviceId)
+
                 if (tvIdUserActivity.text.equals("")) {
                     insertUser()
                     resetForm()
                 } else {
+
                     updateUser(tvIdUserActivity.text.toString())
+                    binding.boxDeviceId.visibility = View.GONE
                     resetForm()
+
+//                    if (tvDeviceId == getDeviceId) {
+//                        Log.d("TAG 2", tvDeviceId)
+//                        Log.d("TAG 2", getDeviceId)
+//                        Toast.makeText(this@UsersActivity, "Device Id already taken by other account", Toast.LENGTH_SHORT).show()
+//                    } else {
+//                        updateUser(tvIdUserActivity.text.toString())
+//                        resetForm()
+//                    }
                 }
+
+//                if (tvDeviceId == getDeviceId) {
+//                    Toast.makeText(this@UsersActivity, "Device Id already taken by other account", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    updateUser(tvIdUserActivity.text.toString())
+//                    resetForm()
+//                }
+
+//                if (tvIdUserActivity.text.equals("")) {
+//                    insertUser()
+//                    resetForm()
+//                } else {
+//                    updateUser(tvIdUserActivity.text.toString())
+//                    resetForm()
+//                }
             }
         }
+    }
+
+    private fun checkDeviceId(tvDeviceId: String): String {
+        val resultDeviceId = Device()
+        NetworkConfig().getServiceUser().checkDeviceId(tvDeviceId)
+            .enqueue(object : Callback<GetAllUserResponse> {
+                override fun onResponse(
+                    call: Call<GetAllUserResponse>,
+                    response: Response<GetAllUserResponse>
+                ) {
+                    resultDeviceId.deviceId = response.body()?.data?.get(0)?.device_id.toString()
+                    Log.d("CDI res", resultDeviceId.deviceId)
+                }
+
+                override fun onFailure(call: Call<GetAllUserResponse>, t: Throwable) {
+                    Log.e("CDI", t.message.toString())
+                }
+
+            })
+        Log.d("CDI return", resultDeviceId.deviceId)
+        return resultDeviceId.deviceId
     }
 
     private fun insertUser() {
@@ -70,7 +160,8 @@ class UsersActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 binding.etFullName.text.toString(),
                 binding.etEmail.text.toString(),
                 binding.etPassword.text.toString(),
-                photo_user = imageName
+                photo_user = imageName,
+                device_id = "NULL"
             )
             .enqueue(object : Callback<CreateDataResponse> {
                 override fun onResponse(
@@ -98,6 +189,7 @@ class UsersActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 binding.etEmail.text.toString(),
                 binding.etPassword.text.toString(),
                 photo_user = imageName,
+                binding.etDeviceID.text.toString(),
                 id
             )
             .enqueue(object : Callback<UpdateDataResponse> {

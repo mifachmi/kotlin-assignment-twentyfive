@@ -9,6 +9,13 @@
     android:orientation="vertical"
     tools:context=".activity.LoginActivity">
 
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tvDeviceID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"/>
+
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,13 +57,31 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:id="@+id/btnLogin"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/login"/>
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_toStartOf="@id/btnBiometric"
+            android:layout_marginEnd="16dp"
+            android:text="@string/login" />
+
+        <ImageButton
+            android:id="@+id/btnBiometric"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="@color/purple_500"
+            android:src="@drawable/ic_baseline_fingerprint_24"
+            tools:ignore="RelativeOverlap" />
+
+    </RelativeLayout>
 
     <com.google.android.material.button.MaterialButton
         android:visibility="gone"

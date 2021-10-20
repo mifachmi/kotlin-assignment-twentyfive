@@ -41,7 +41,6 @@ class HistoryUserActivity : AppCompatActivity() {
                     btnEditUser.setOnItemClickCallback(object :
                         ListUserAdapter.OnItemClickCallback {
                         override fun onItemClicked(data: DataItemUser) {
-
                             val editDataUserIntent = Intent()
                             editDataUserIntent.putExtra(PARCEL_DATA_USER, data)
                             setResult(RESULT_CODE, editDataUserIntent)
