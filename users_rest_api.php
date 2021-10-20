@@ -128,6 +128,94 @@ function get_user_with_id()
     echo json_encode($response);
 }
 
+function get_user_by_device_id() {
+    global $connect;
+    if (!empty($_GET['device_id'])) {
+        $device_id = $_GET['device_id'];
+    }
+
+    $query = "SELECT * FROM users WHERE device_id = '$device_id'";
+    $result = $connect->query($query);
+    while ($row = mysqli_fetch_object($result)) {
+        $data[] = $row;
+    }
+
+    if ($data) {
+        $response = array(
+            'status' => 1,
+            'message' => 'get data succeed',
+            'data' => $data
+        );
+    } else {
+        $response = array(
+            'status' => 0,
+            'message' => 'no data found'
+        );
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+}
+
+function check_device_id() {
+    global $connect;
+    if (!empty($_GET['device_id'])) {
+        $deviceId = $_GET['device_id'];
+    }
+
+    $query = "SELECT device_id FROM users WHERE device_id = '$deviceId'";
+    $result = $connect->query($query);
+    while ($row = mysqli_fetch_object($result)) {
+        $data[] = $row;
+    }
+
+    if ($data) {
+        $response = array(
+            'status' => 1,
+            'message' => 'get data succeed',
+            'data' => $data
+        );
+    } else {
+        $response = array(
+            'status' => 0,
+            'message' => 'no data found'
+        );
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+}
+
+function check_device_id_by_user_id()
+{
+    global $connect;
+    if (!empty($_GET['id'])) {
+        $id = $_GET['id'];
+    }
+
+    $query = "SELECT device_id FROM users WHERE id = '$id'";
+    $result = $connect->query($query);
+    while ($row = mysqli_fetch_object($result)) {
+        $data[] = $row;
+    }
+
+    if ($data) {
+        $response = array(
+            'status' => 1,
+            'message' => 'get data succeed',
+            'data' => $data
+        );
+    } else {
+        $response = array(
+            'status' => 0,
+            'message' => 'no data found'
+        );
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+}
+
 function add_new_user()
 {
     global $connect;
@@ -183,7 +271,8 @@ function update_user()
         'name_user' => '',
         'email_user' => '',
         'password' => '',
-        'photo_user' => ''
+        'photo_user' => '',
+        'device_id' =>''
     );
     $dataFromUserCheck = count(array_intersect_key($_POST, $tableAtribute));
 
@@ -192,7 +281,8 @@ function update_user()
                   name_user = '$_POST[name_user]',
                   email_user = '$_POST[email_user]',
                   password = '$_POST[password]',
-                  photo_user = '$_POST[photo_user]' WHERE id = $id";
+                  photo_user = '$_POST[photo_user]',
+                  device_id = '$_POST[device_id]' WHERE id = $id";
         $result = mysqli_query($connect, $query);
 
         if ($result) {
