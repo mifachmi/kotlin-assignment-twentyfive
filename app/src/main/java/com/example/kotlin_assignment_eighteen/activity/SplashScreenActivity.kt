@@ -12,7 +12,7 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
-        val splashTime: Long = 2000
+        val splashTime: Long = 5000
 
         Handler(Looper.myLooper()!!).postDelayed({
             val intent = Intent(this, DashboardActivity::class.java)

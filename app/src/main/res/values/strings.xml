@@ -23,4 +23,6 @@
     <string name="send_notification">Send Notification</string>
     <string name="fachmi_dimas_ardhana">Fachmi Dimas Ardhana</string>
     <string name="device_id">Device ID</string>
+    <string name="to_do_list_app">To Do List App</string>
+    <string name="desc">We Can Organized and Keep All of Your Task</string>
 </resources>
