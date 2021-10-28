@@ -61,11 +61,13 @@ class FormCloudMessagingActivity : AppCompatActivity() {
                         Log.d("TAG", response.body().toString())
                         Toast.makeText(this@FormCloudMessagingActivity, "sukses push notifikasi", Toast.LENGTH_SHORT).show()
                     } else {
+                        Log.d("TAG", response.body()?.status.toString())
                         Toast.makeText(this@FormCloudMessagingActivity, "gagal push notifikasi ke fcm", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
+                    Log.d("TAG", t.localizedMessage)
                     Toast.makeText(this@FormCloudMessagingActivity, "gagal push notifikasi ke fcm", Toast.LENGTH_SHORT).show()
                 }
 

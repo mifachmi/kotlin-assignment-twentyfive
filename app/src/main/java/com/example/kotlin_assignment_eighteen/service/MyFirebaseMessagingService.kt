@@ -1,4 +1,4 @@
-package com.example.kotlin_assignment_eighteen.firebase
+package com.example.kotlin_assignment_eighteen.service
 
 import android.annotation.SuppressLint
 import android.app.NotificationChannel

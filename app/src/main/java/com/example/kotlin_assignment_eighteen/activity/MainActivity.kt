@@ -158,6 +158,11 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
                 startActivity(intentToAddAccount)
                 true
             }
+            R.id.itemSetAlarm -> {
+                val intentToAlarmManager = Intent(this, AlarmManagerActivity::class.java)
+                startActivity(intentToAlarmManager)
+                true
+            }
             else -> true
         }
     }
